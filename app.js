@@ -1,6 +1,19 @@
+document.getElementById("search-field").addEventListener("keypress", function(event) {
+/*     event.preventDefault();
+    console.log("working-Keycode",event.key, event.keyCode); */
+    if (event.key === 'Enter'){
+        document.getElementById("search-button").click();
+    }
+});
+
+
+
+
 const searchSongs = () => {
     const searchText = document.getElementById('search-field').value;
     document.getElementById('search-field').value="";
+    toggleSpinner();
+    document.getElementById('song-lyrics').innerText =""; 
     const url = `https://api.lyrics.ovh/suggest/${searchText}`;
     fetch(url)
     .then(res => res.json())
@@ -27,11 +40,13 @@ const displaySongs = songs =>{
             </div>
         `
         songContainer.appendChild(songsDiv);
+        toggleSpinner();
     });
 }
 
 const getLyric = (artist, title) =>{
     console.log(artist, title)
+    toggleSpinner();
     const url = `https://api.lyrics.ovh/v1/${artist}/${title}`;
     fetch(url)
     .then(res => res.json())
@@ -39,6 +54,7 @@ const getLyric = (artist, title) =>{
     .catch(error => displayError("Something Went Wrong!! Please try again later..."));
 }
 const displayLyrics = lyrics => {
+    toggleSpinner();
     const lyricsDiv = document.getElementById('song-lyrics');
     lyricsDiv.innerText = lyrics;
 }
@@ -46,4 +62,18 @@ const displayLyrics = lyrics => {
 const displayError = error => {
     const errorTag = document.getElementById('error-message');
     errorTag.innerText = error;
+}
+
+const toggleSpinner = () =>{
+    const loadingSpinner = document.getElementById('loading-spinner');
+    loadingSpinner.classList.toggle('d-none');
+    document.getElementById('song-container').classList.toggle('d-none');
+
+/*     if(show){
+
+        loadingSpinner.classList.remove('d-none');
+    }else{
+
+        loadingSpinner.classList.add('d-none');
+    } */
 }
